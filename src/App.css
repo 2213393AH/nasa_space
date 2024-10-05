@@ -13,11 +13,14 @@
   color: #888;
 }
 
-
 .app-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-image: url('/background.jpg'); 
+  background-size: cover; 
+  background-position: center;
+  background-repeat: no-repeat; 
 }
 
 .header, .footer {
@@ -41,7 +44,7 @@
 .game-panel {
   padding: 2rem;
   background-color: #fff;
-  color:black;
+  color: black;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -68,5 +71,3 @@ button {
 .options button:hover {
   background-color: #0056b3;
 }
-
-
