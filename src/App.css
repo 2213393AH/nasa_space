@@ -42,32 +42,35 @@
 }
 
 .game-panel {
-  padding: 2rem;
+  padding: 20px;
   background-color: #fff;
   color: black;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  color: black;
 }
 
-button {
-  margin: 10px;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
+.effort p {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 10px 0;
 }
 
 .options button {
-  margin: 10px;
+  display: block;
+  margin: 10px 0;
   padding: 10px 20px;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  width: 100%;
 }
 
 .options button:hover {
   background-color: #0056b3;
 }
+
+
