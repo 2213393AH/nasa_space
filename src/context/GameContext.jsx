@@ -1,54 +1,110 @@
-import React, { createContext, useState, useEffect } from 'react';
-import { scenarios } from '../logic/scenarios';
+import React, { createContext, useState, useEffect } from "react";
+import { scenarios } from "../logic/scenarios";
+import {
+  applyDecisionEffects,
+  getNextScenario,
+  calculateScore,
+  provideFeedback,
+} from "../logic/gameLogic";
+import ResultPage from "../components/ResultPage"; // Adjust path according to your structure
 
 export const GameContext = createContext();
 
 export const GameContextProvider = ({ children }) => {
   const [effort, setEffort] = useState(100); // Starting effort value
+  const [currentDomain, setCurrentDomain] = useState("airQuality"); // Track current domain
+  const [indices, setIndices] = useState({
+    airQuality: 0,
+    waterAvailability: 0,
+    // Add other domains here if needed
+  }); // Track scenario indices for each domain
+  const [domainsLeft, setDomainsLeft] = useState([
+    "airQuality",
+    "waterAvailability",
+  ]); // Domains with scenarios left
   const [currentScenario, setCurrentScenario] = useState(null); // Current active scenario
   const [state, setState] = useState({
-    aqi: 'Moderate', // Air Quality Index starts moderate
-    waterAvailability: 'Balanced', // Water starts balanced
+    aqi: "Moderate", // Air Quality Index starts moderate
+    waterAvailability: "Balanced", // Water starts balanced
   });
+  const [gameOver, setGameOver] = useState(false); // Track game over state
+  const [finalScore, setFinalScore] = useState(null); // Store final score
+  const [feedback, setFeedback] = useState(""); // Store feedback
 
-  // Ensures the game starts with the first scenario
   useEffect(() => {
-    startScenario(); // Start the game immediately
-  }, []);
-
-  const startScenario = () => {
-    if (state.aqi === 'Poor') {
-      setCurrentScenario(scenarios.airQuality[0]); // Show air quality related scenarios
-    } else if (state.waterAvailability === 'Scarce') {
-      setCurrentScenario(scenarios.waterAvailability[0]); // Show water-related scenarios
-    } else {
-      setCurrentScenario(scenarios.airQuality[0]); // Default to air quality scenario for now
-    }
-  };
+    // Get the index for the current domain and fetch the scenario
+    const currentScenarioIndex = indices[currentDomain];
+    setCurrentScenario(
+      getNextScenario(state, currentScenarioIndex, scenarios, currentDomain)
+    );
+  }, [currentDomain, indices, state]);
 
   const makeDecision = (option) => {
-    // Apply the effects of the chosen option
-    setEffort((prevEffort) => prevEffort + option.effects.effort);
+    // Apply decision effects using gameLogic.js
+    const { newEffort, newState } = applyDecisionEffects(option, state, effort);
+    setEffort(newEffort);
+    setState(newState);
 
-    // Update parameter state based on the decision
-    if (option.effects.aqi) {
-      setState((prevState) => ({ ...prevState, aqi: option.effects.aqi }));
-    }
-
-    if (option.effects.waterAvailability) {
-      setState((prevState) => ({ ...prevState, waterAvailability: option.effects.waterAvailability }));
-    }
-
-    // Check if effort is still available and move to the next scenario
-    if (effort + option.effects.effort > 0) {
-      startScenario(); // Continue to the next scenario
+    // Check if the game is over
+    if (newEffort > 0) {
+      // Check if there are more scenarios in the current domain
+      if (indices[currentDomain] + 1 < scenarios[currentDomain].length) {
+        // Move to the next scenario in the current domain
+        setIndices((prevIndices) => ({
+          ...prevIndices,
+          [currentDomain]: prevIndices[currentDomain] + 1,
+        }));
+      } else {
+        // If no more scenarios in this domain, move to the next available domain
+        moveToNextDomain();
+      }
     } else {
-      setCurrentScenario(null); // Game over when effort runs out
+      // End the game if effort is exhausted
+      endGame(newState);
     }
   };
 
+  const moveToNextDomain = () => {
+    // Remove the current domain from the list of domainsLeft
+    const remainingDomains = domainsLeft.filter(
+      (domain) => domain !== currentDomain
+    );
+
+    if (remainingDomains.length > 0) {
+      // Move to the next available domain
+      setCurrentDomain(remainingDomains[0]);
+      setDomainsLeft(remainingDomains);
+    } else {
+      // End the game if all domains have been exhausted
+      endGame(state);
+    }
+  };
+
+  const endGame = (finalState) => {
+    setEffort(0); // Prevent negative effort
+    setGameOver(true);
+    const score = calculateScore(finalState);
+    setFinalScore(score);
+    const feedbackText = provideFeedback(score);
+    setFeedback(feedbackText);
+  };
+
+  // Conditional rendering: if gameOver is true, show the ResultPage component
+  if (gameOver) {
+    return <ResultPage finalScore={finalScore} feedback={feedback} />;
+  }
+
   return (
-    <GameContext.Provider value={{ currentScenario, effort, makeDecision, startScenario }}>
+    <GameContext.Provider
+      value={{
+        currentScenario,
+        effort,
+        gameOver,
+        finalScore,
+        makeDecision,
+        setCurrentDomain, // Expose function to change domain (if needed)
+      }}
+    >
       {children}
     </GameContext.Provider>
   );

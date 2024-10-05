@@ -1,13 +1,19 @@
-import React, { useContext } from 'react';
-import { GameContext } from '../context/GameContext';
 
-export const ResultPage = () => {
-  const { gameResult } = useContext(GameContext);
+
+import React, { useContext } from 'react';
+
+const ResultPage = ({finalScore, feedback}) => {
 
   return (
     <div className="result-page">
       <h2>Game Over</h2>
-      <p>Your Result: {gameResult}</p>
+      <p>Your final score is: {finalScore}</p>
+      <h3>Feedback:</h3>
+      <p>{feedback}</p>
+      <button onClick={() => window.location.reload()}>Play Again</button>
     </div>
   );
 };
+
+export default ResultPage;
+
