@@ -1,32 +1,54 @@
-import React, { createContext, useState } from "react";
-import { scenarios } from "../logic/scenarios";
+import React, { createContext, useState, useEffect } from 'react';
+import { scenarios } from '../logic/scenarios';
 
 export const GameContext = createContext();
 
 export const GameContextProvider = ({ children }) => {
-  const [currentScenarioIndex, setCurrentScenarioIndex] = useState(0);
-  const [gameResult, setGameResult] = useState("");
+  const [effort, setEffort] = useState(100); // Starting effort value
+  const [currentScenario, setCurrentScenario] = useState(null); // Current active scenario
+  const [state, setState] = useState({
+    aqi: 'Moderate', // Air Quality Index starts moderate
+    waterAvailability: 'Balanced', // Water starts balanced
+  });
 
-  const currentScenario = scenarios[currentScenarioIndex];
+  // Ensures the game starts with the first scenario
+  useEffect(() => {
+    startScenario(); // Start the game immediately
+  }, []);
+
+  const startScenario = () => {
+    if (state.aqi === 'Poor') {
+      setCurrentScenario(scenarios.airQuality[0]); // Show air quality related scenarios
+    } else if (state.waterAvailability === 'Scarce') {
+      setCurrentScenario(scenarios.waterAvailability[0]); // Show water-related scenarios
+    } else {
+      setCurrentScenario(scenarios.airQuality[0]); // Default to air quality scenario for now
+    }
+  };
 
   const makeDecision = (option) => {
-    // Basic decision logic: decide based on the option clicked
-    const result =
-      option === "option1" ? "Positive Outcome" : "Negative Outcome";
-    setGameResult(result);
+    // Apply the effects of the chosen option
+    setEffort((prevEffort) => prevEffort + option.effects.effort);
 
-    // Move to the next scenario
-    const nextIndex = currentScenarioIndex + 1;
-    if (nextIndex < scenarios.length) {
-      setCurrentScenarioIndex(nextIndex);
+    // Update parameter state based on the decision
+    if (option.effects.aqi) {
+      setState((prevState) => ({ ...prevState, aqi: option.effects.aqi }));
+    }
+
+    if (option.effects.waterAvailability) {
+      setState((prevState) => ({ ...prevState, waterAvailability: option.effects.waterAvailability }));
+    }
+
+    // Check if effort is still available and move to the next scenario
+    if (effort + option.effects.effort > 0) {
+      startScenario(); // Continue to the next scenario
     } else {
-      // If no more scenarios, set currentScenario to null to show "Game Over"
-      setCurrentScenarioIndex(null);
+      setCurrentScenario(null); // Game over when effort runs out
     }
   };
 
   return (
-    <GameContext.Provider value={{ currentScenario, gameResult, makeDecision }}>
+    <GameContext.Provider value={{ currentScenario, effort, makeDecision, startScenario }}>
       {children}
     </GameContext.Provider>
   );
