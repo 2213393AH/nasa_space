@@ -5,6 +5,8 @@ import { Header } from "./components/Header";
 import { Sidebar } from "./components/Sidebar";
 import { Footer } from "./components/Footer";
 import { GameContextProvider } from "./context/GameContext";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
   return (
