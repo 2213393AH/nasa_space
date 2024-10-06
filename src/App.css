@@ -1,73 +1,181 @@
+html, body {
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  
+  font-family: "Bebas Neue", sans-serif;
+  
+  background-image: url('../public/nasa.png');
+  background-size: cover; /* Cover the entire area */
+  background-position: center;
+  background-repeat: no-repeat; /* Prevent tiling */
+}
+
+ /* Root Container */
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  /* background: linear-gradient(135deg, #031421, #0535b8); Dark blue gradient background */
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+  
+  height: 100vh;
+  width: 100vw;
 }
 
+/* Card Component */
 .card {
   padding: 2em;
+  background-color: #0521369d; /* Darker background for cards */
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Shadow for a modern feel */
+  color: white;
 }
 
+/* Documentation link styling */
 .read-the-docs {
-  color: #888;
+  color: #052136;
 }
 
-
+/* App Container */
 .app-container {
   display: flex;
   flex-direction: column;
   min-height: 80vh;
 }
 
-.header, .footer {
-  background-color: #282c34;
+/* Header and Footer */
+.header{
+  background-color: #05213671; /* Dark blue */
   color: white;
   text-align: center;
   padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.footer{
+  margin-bottom: -10vh;
+  font-weight: 500;
+  margin-right: 20vw;
+
+  
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* Game Layout */
 .game-layout {
   display: flex;
   flex: 1;
+  margin-top: 10%;
 }
 
+/* Sidebar */
 .sidebar {
   width: 20%;
   padding: 1rem;
-  background-color: #f5f5f5;
+  background-color: #052136c6; /* Darker sidebar background */
+  border-radius: 10px;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  margin-right: 20px;
+  text-align: left;
 }
 
+.sidebar h3 {
+  color: #00aaff;
+}
+
+/* Game Panel */
 .game-panel {
   padding: 20px;
-  background-color: #fff;
+  background-color: #00288e30; /* Dark blue panel */
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
   margin-bottom: 20px;
-  color: black;
+  color: white;
+  height: 50vh;
 }
 
+.game-panel h2, .game-panel p {
+  color: #f0f0f0;
+}
+
+/* Effort */
 .effort p {
   font-size: 18px;
   font-weight: bold;
   margin: 10px 0;
+  color: #00aaff; /* Light blue for effort */
 }
 
+/* Options Buttons */
 .options button {
   display: block;
   margin: 10px 0;
   padding: 10px 20px;
-  background-color: #007bff;
+  background: linear-gradient(135deg, #00288edf, #0057b38d); /* Gradient blue button */
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   width: 100%;
+  transition: background 0.3s ease-in-out, transform 0.2s ease;
 }
 
 .options button:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #00288ee1, #003f7f); /* Darker hover effect */
+  transform: scale(1.05);
+}
+
+/* Context Container for Layout */
+.contextContainer {
+  display: flex;
+  justify-content: space-around;
+}
+
+/* Game Status Container */
+#gameStatusContainer {
+  height: 50%;
+  background-color: #00288e30;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  color: #f0f0f0;
+  margin-top: 10%;
+}
+#gameStatusContainer ul li{
+  background-color: rgba(0, 33, 117, 0.729) !important;
+  color:white !important;
 }
 
 
+/* Other Styling */
+h2, h3, h4 {
+  color: #00aaff;
+}
+
+/* Scrollbar for Modern Look */
+::-webkit-scrollbar {
+  width: 8px;
+  background-color: #0606a8;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #007bff;
+  border-radius: 5px;
+}
 

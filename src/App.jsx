@@ -12,9 +12,9 @@ function App() {
   return (
     <GameContextProvider>
       <div className="app-container">
-        <Header />
+        {/* <Header /> */}
         <div className="game-layout">
-          <Sidebar />
+          {/* <Sidebar /> */}
           <GamePanel />
         </div>
         <Footer />
